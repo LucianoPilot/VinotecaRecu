@@ -1,0 +1,6 @@
+@VinotecaRecu_HostAddress = http://localhost:5012
+
+GET {{VinotecaRecu_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
