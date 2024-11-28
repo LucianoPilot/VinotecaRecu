@@ -68,14 +68,10 @@ namespace VinotecaRecu.Data
             modelBuilder.Entity<Wine>().HasData(malbec, cabernetSauvignon);
 
             // Configuración para la relación muchos a muchos
-            modelBuilder.Entity<Wine>()
-                .HasMany(w => w.Catas)  // 'Wine' tiene muchas 'Catas'
-                .WithMany(c => c.Wines) // 'Cata' tiene muchos 'Wines'
-                .UsingEntity<Dictionary<string, object>>(
-                    "WineCata", // Nombre de la tabla intermedia
-                    r => r.HasOne<Cata>().WithMany().HasForeignKey("CataId"), // ForeignKey de Cata
-                    l => l.HasOne<Wine>().WithMany().HasForeignKey("WineId") // ForeignKey de Wine
-                );
+            modelBuilder.Entity<Cata>()
+                .HasMany(c => c.Wines)
+                .WithMany(w => w.Catas)
+                .UsingEntity(j => j.ToTable("CataWine"));
 
             base.OnModelCreating(modelBuilder);
         }

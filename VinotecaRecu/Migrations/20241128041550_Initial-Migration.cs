@@ -21,7 +21,6 @@ namespace VinotecaRecu.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    WineIds = table.Column<string>(type: "TEXT", nullable: false),
                     Invitados = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -63,24 +62,24 @@ namespace VinotecaRecu.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WineCata",
+                name: "CataWine",
                 columns: table => new
                 {
-                    CataId = table.Column<int>(type: "INTEGER", nullable: false),
-                    WineId = table.Column<int>(type: "INTEGER", nullable: false)
+                    CatasId = table.Column<int>(type: "INTEGER", nullable: false),
+                    WinesId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WineCata", x => new { x.CataId, x.WineId });
+                    table.PrimaryKey("PK_CataWine", x => new { x.CatasId, x.WinesId });
                     table.ForeignKey(
-                        name: "FK_WineCata_Catas_CataId",
-                        column: x => x.CataId,
+                        name: "FK_CataWine_Catas_CatasId",
+                        column: x => x.CatasId,
                         principalTable: "Catas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_WineCata_Wines_WineId",
-                        column: x => x.WineId,
+                        name: "FK_CataWine_Wines_WinesId",
+                        column: x => x.WinesId,
                         principalTable: "Wines",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -100,24 +99,24 @@ namespace VinotecaRecu.Migrations
                 columns: new[] { "Id", "CreatedAt", "Name", "Region", "Stock", "Variety", "Year" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2024, 11, 21, 16, 58, 27, 166, DateTimeKind.Utc).AddTicks(4800), "Cabernet Sauvignon", "Mendoza", 50, "Cabernet Sauvignon", 2018 },
-                    { 2, new DateTime(2024, 11, 21, 16, 58, 27, 166, DateTimeKind.Utc).AddTicks(5039), "Malbec", "Mendoza", 30, "Malbec", 2020 }
+                    { 1, new DateTime(2024, 11, 28, 4, 15, 49, 312, DateTimeKind.Utc).AddTicks(5227), "Cabernet Sauvignon", "Mendoza", 50, "Cabernet Sauvignon", 2018 },
+                    { 2, new DateTime(2024, 11, 28, 4, 15, 49, 312, DateTimeKind.Utc).AddTicks(5486), "Malbec", "Mendoza", 30, "Malbec", 2020 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_WineCata_WineId",
-                table: "WineCata",
-                column: "WineId");
+                name: "IX_CataWine_WinesId",
+                table: "CataWine",
+                column: "WinesId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "CataWine");
 
             migrationBuilder.DropTable(
-                name: "WineCata");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Catas");

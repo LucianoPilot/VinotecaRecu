@@ -6,7 +6,7 @@ namespace VinotecaRecu.Data.Interfaces
     {
         void Add(Cata cata);
         Cata GetById(int id);
-        IEnumerable<Cata> GetAll();
+        IQueryable<Cata> GetAll();
         Task AddAsync(Cata cata);
         void UpdateInvitados(int cataId, List<string> nuevosInvitados);
     }

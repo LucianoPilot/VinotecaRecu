@@ -28,10 +28,11 @@ namespace VinotecaRecu.Data.Repositories
         {
             return _context.Catas.Include(c => c.Wines).FirstOrDefault(c => c.Id == id);
         }
-        public IEnumerable<Cata> GetAll()
+        public IQueryable<Cata> GetAll()
         {
-            return _context.Catas.Include(c => c.Wines).ToList();
+            return _context.Catas.AsQueryable();
         }
+
 
         public void UpdateInvitados(int cataId, List<string> nuevosInvitados)
         {

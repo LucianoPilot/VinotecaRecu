@@ -63,13 +63,26 @@ namespace VinotecaRecu.Controllers
             }
         }
         [HttpGet("upcoming")]
-        public async Task<IActionResult> GetUpcomingCatas()
+        public IActionResult GetUpcomingCatas()
         {
-            var upcomingCatas = await _context.Catas
-                                              .Where(c => c.Fecha > DateTime.Now)
-                                              .Include(c => c.Wines)
-                                              .ToListAsync();
+            var upcomingCatas = _context.Catas
+                .Where(c => c.Fecha > DateTime.Now)
+                .Select(c => new CataDTO
+                {
+                    Id = c.Id,
+                    Nombre = c.Name,
+                    Fecha = c.Fecha,
+                    Wines = c.Wines.Select(w => new WineDTO
+                    {
+                        Id = w.Id,
+                        Nombre = w.Name,
+                        Variedad = w.Variety
+                    }).ToList()
+                })
+                .ToList();
+
             return Ok(upcomingCatas);
         }
+
     }
 }

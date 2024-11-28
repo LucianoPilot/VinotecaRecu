@@ -11,14 +11,29 @@ using VinotecaRecu.Data;
 namespace VinotecaRecu.Migrations
 {
     [DbContext(typeof(VinotecaRecuContext))]
-    [Migration("20241121175608_AddManyToMany")]
-    partial class AddManyToMany
+    [Migration("20241128041550_Initial-Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+
+            modelBuilder.Entity("CataWine", b =>
+                {
+                    b.Property<int>("CatasId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WinesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CatasId", "WinesId");
+
+                    b.HasIndex("WinesId");
+
+                    b.ToTable("CataWine", (string)null);
+                });
 
             modelBuilder.Entity("VinotecaRecu.Data.Entities.Cata", b =>
                 {
@@ -34,10 +49,6 @@ namespace VinotecaRecu.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.PrimitiveCollection<string>("WineIds")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -119,7 +130,7 @@ namespace VinotecaRecu.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2024, 11, 21, 17, 56, 7, 649, DateTimeKind.Utc).AddTicks(5114),
+                            CreatedAt = new DateTime(2024, 11, 28, 4, 15, 49, 312, DateTimeKind.Utc).AddTicks(5486),
                             Name = "Malbec",
                             Region = "Mendoza",
                             Stock = 30,
@@ -129,7 +140,7 @@ namespace VinotecaRecu.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 11, 21, 17, 56, 7, 649, DateTimeKind.Utc).AddTicks(4479),
+                            CreatedAt = new DateTime(2024, 11, 28, 4, 15, 49, 312, DateTimeKind.Utc).AddTicks(5227),
                             Name = "Cabernet Sauvignon",
                             Region = "Mendoza",
                             Stock = 50,
@@ -138,32 +149,17 @@ namespace VinotecaRecu.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WineCata", b =>
-                {
-                    b.Property<int>("CataId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("WineId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CataId", "WineId");
-
-                    b.HasIndex("WineId");
-
-                    b.ToTable("WineCata");
-                });
-
-            modelBuilder.Entity("WineCata", b =>
+            modelBuilder.Entity("CataWine", b =>
                 {
                     b.HasOne("VinotecaRecu.Data.Entities.Cata", null)
                         .WithMany()
-                        .HasForeignKey("CataId")
+                        .HasForeignKey("CatasId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("VinotecaRecu.Data.Entities.Wine", null)
                         .WithMany()
-                        .HasForeignKey("WineId")
+                        .HasForeignKey("WinesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

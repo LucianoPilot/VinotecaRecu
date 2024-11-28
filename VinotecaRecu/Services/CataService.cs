@@ -2,6 +2,7 @@
 using VinotecaRecu.Data.Interfaces;
 using VinotecaRecu.Data.Repositories;
 using VinotecaRecu.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace VinotecaRecu.Services
 {
@@ -16,37 +17,44 @@ namespace VinotecaRecu.Services
             _wineRepository = wineRepository;
 
         }
-             public async Task CreateCata(CreateCataDTO dto)
-             {
+        public async Task CreateCata(CreateCataDTO dto)
+        {
+            // Recupera los vinos basándote en los IDs proporcionados
             var wines = await _wineRepository.GetByIdsAsync(dto.WineIds);
-            if (wines == null || wines.Count == 0)
+
+            if (wines == null || !wines.Any())
                 throw new Exception("No se encontraron vinos con los IDs proporcionados.");
 
             var newCata = new Cata
             {
                 Fecha = dto.Fecha,
                 Name = dto.Name,
-                Wines = wines.ToList(), // Asociar las entidades de vino
+                Wines = wines.ToList(), // Asocia los vinos a la nueva cata
                 Invitados = dto.Invitados
             };
-            await _cataRepository.AddAsync(newCata);
+
+            await _cataRepository.AddAsync(newCata); // Guarda la cata con las relaciones
         }
+
 
 
         public List<GetCataDTO> GetAllCata()
         {
-            var catas = _cataRepository.GetAll();
+            var catas = _cataRepository.GetAll()
+                .Include(c => c.Wines) // Asegura que las relaciones se carguen
+                .ToList();
+
             return catas.Select(cata => new GetCataDTO
             {
                 Fecha = cata.Fecha,
                 Name = cata.Name,
-                WineIds = cata.WineIds,
-                Invitados = cata.Invitados,
-
+                WineIds = cata.Wines.Select(w => w.Id).ToList(), // Deriva los IDs de los vinos
+                Invitados = cata.Invitados
             }).ToList();
         }
 
-public void UpdateInvitados(int cataId, List<string> nuevosInvitados)
+
+        public void UpdateInvitados(int cataId, List<string> nuevosInvitados)
 {
     if (nuevosInvitados == null || !nuevosInvitados.Any())
     {
